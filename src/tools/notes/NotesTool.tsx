@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import clsx from 'clsx'
 import { TextAreaField } from '../../components/TextAreaField'
@@ -8,14 +8,24 @@ import { countRemaining, createTodo, removeTodo, sortTodos, toggleTodo, type Tod
 function TodoTab() {
   const [items, setItems] = useLocalStorage<TodoItem[]>('toolkit:notes-todos', [])
   const [draft, setDraft] = useState('')
+  // Mirrors `draft` but is mutated synchronously, so a second Enter/click that fires
+  // before React re-renders (e.g. fast key auto-repeat) can't reuse the same text twice.
+  const draftRef = useRef('')
 
   const sorted = useMemo(() => sortTodos(items), [items])
   const remaining = countRemaining(items)
 
+  const handleDraftChange = (value: string) => {
+    draftRef.current = value
+    setDraft(value)
+  }
+
   const handleAdd = () => {
-    if (!draft.trim()) return
-    setItems((prev) => [...prev, createTodo(draft)])
+    const text = draftRef.current
+    if (!text.trim()) return
+    draftRef.current = ''
     setDraft('')
+    setItems((prev) => [...prev, createTodo(text)])
   }
 
   return (
@@ -23,7 +33,7 @@ function TodoTab() {
       <div className="flex gap-2">
         <input
           value={draft}
-          onChange={(e) => setDraft(e.target.value)}
+          onChange={(e) => handleDraftChange(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
           placeholder="Việc cần làm hoặc thứ cần thay đổi..."
           className="flex-1 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900"
