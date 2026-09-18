@@ -13,6 +13,7 @@ import {
   KeyRound,
   Link2,
   ListChecks,
+  NotebookPen,
   Palette,
   Regex,
   Table,
@@ -21,9 +22,10 @@ import {
   Webhook,
 } from 'lucide-react'
 
-export type ToolCategory = 'dev-utils' | 'converters' | 'network'
+export type ToolCategory = 'workspace' | 'dev-utils' | 'converters' | 'network'
 
 export const CATEGORY_LABELS: Record<ToolCategory, string> = {
+  workspace: 'Workspace',
   'dev-utils': 'Dev Utilities',
   converters: 'Text / Data Converters',
   network: 'API / Network Tools',
@@ -40,6 +42,15 @@ export interface ToolDefinition {
 }
 
 export const TOOLS: ToolDefinition[] = [
+  {
+    id: 'notes',
+    title: 'Notes & Todo',
+    description: 'Track things to fix, things to build, and free-form notes so you don’t forget.',
+    category: 'workspace',
+    keywords: ['notes', 'todo', 'task', 'reminder', 'scratchpad'],
+    icon: NotebookPen,
+    component: lazy(() => import('./notes/NotesTool').then((m) => ({ default: m.NotesTool }))),
+  },
   {
     id: 'json-formatter',
     title: 'JSON Formatter',

@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { CATEGORY_LABELS, searchTools, type ToolCategory } from '../tools/registry'
 import { SidebarSearch } from './SidebarSearch'
 
-const CATEGORIES: ToolCategory[] = ['dev-utils', 'converters', 'network']
+const CATEGORIES: ToolCategory[] = ['workspace', 'dev-utils', 'converters', 'network']
 
 export function Sidebar() {
   const [query, setQuery] = useState('')

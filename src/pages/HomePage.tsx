@@ -3,7 +3,7 @@ import { useFavorites } from '../hooks/useFavorites'
 import { useRecentTools } from '../hooks/useRecentTools'
 import { CATEGORY_LABELS, TOOLS, getToolById, getToolsByCategory, type ToolCategory } from '../tools/registry'
 
-const CATEGORIES: ToolCategory[] = ['dev-utils', 'converters', 'network']
+const CATEGORIES: ToolCategory[] = ['workspace', 'dev-utils', 'converters', 'network']
 
 function ToolCard({ tool }: { tool: (typeof TOOLS)[number] }) {
   return (
