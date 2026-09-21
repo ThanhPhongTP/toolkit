@@ -27,4 +27,11 @@ describe('generateLoremIpsum', () => {
   it('throws for a non-positive count', () => {
     expect(() => generateLoremIpsum(0, 'words')).toThrow()
   })
+
+  it('does not exceed the requested word count when starting with Lorem ipsum', () => {
+    const result = generateLoremIpsum(1, 'words', true)
+    const words = result.replace(/\.$/, '').split(' ')
+    expect(words).toHaveLength(1)
+    expect(words[0].toLowerCase()).toBe('lorem')
+  })
 })

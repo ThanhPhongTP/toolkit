@@ -29,3 +29,39 @@ export function sortTodos(items: TodoItem[]): TodoItem[] {
 export function countRemaining(items: TodoItem[]): number {
   return items.filter((item) => !item.done).length
 }
+
+export interface Note {
+  id: string
+  title: string
+  content: string
+  createdAt: number
+  updatedAt: number
+}
+
+const UNTITLED_NOTE = 'Ghi chú không tiêu đề'
+const TITLE_MAX_LENGTH = 40
+
+export function deriveNoteTitle(content: string): string {
+  const firstLine = content.split('\n').find((line) => line.trim() !== '')?.trim()
+  if (!firstLine) return UNTITLED_NOTE
+  return firstLine.length > TITLE_MAX_LENGTH ? `${firstLine.slice(0, TITLE_MAX_LENGTH)}…` : firstLine
+}
+
+export function createNote(content: string): Note {
+  const now = Date.now()
+  return { id: crypto.randomUUID(), title: deriveNoteTitle(content), content, createdAt: now, updatedAt: now }
+}
+
+export function updateNoteContent(notes: Note[], id: string, content: string): Note[] {
+  return notes.map((note) =>
+    note.id === id ? { ...note, content, title: deriveNoteTitle(content), updatedAt: Date.now() } : note,
+  )
+}
+
+export function removeNote(notes: Note[], id: string): Note[] {
+  return notes.filter((note) => note.id !== id)
+}
+
+export function sortNotesByUpdated(notes: Note[]): Note[] {
+  return [...notes].sort((a, b) => b.updatedAt - a.updatedAt)
+}

@@ -24,14 +24,25 @@ export interface HttpResponseSummary {
   durationMs: number
 }
 
-export async function sendHttpRequest(request: HttpRequestModel): Promise<HttpResponseSummary> {
+export const DEFAULT_CORS_PROXY_TEMPLATE = 'https://corsproxy.io/?url={url}'
+
+export function applyCorsProxy(url: string, proxyTemplate: string): string {
+  if (!proxyTemplate.trim()) return url
+  const encoded = encodeURIComponent(url)
+  return proxyTemplate.includes('{url}') ? proxyTemplate.replace('{url}', encoded) : proxyTemplate + encoded
+}
+
+export async function sendHttpRequest(
+  request: HttpRequestModel,
+  fetchUrl: string = request.url,
+): Promise<HttpResponseSummary> {
   const start = performance.now()
   const headers: Record<string, string> = {}
   for (const h of request.headers) {
     if (h.key.trim()) headers[h.key] = h.value
   }
   const hasBody = request.method !== 'GET' && request.method !== 'HEAD' && request.body.trim() !== ''
-  const response = await fetch(request.url, {
+  const response = await fetch(fetchUrl, {
     method: request.method,
     headers,
     body: hasBody ? request.body : undefined,

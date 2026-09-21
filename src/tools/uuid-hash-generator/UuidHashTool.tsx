@@ -4,23 +4,22 @@ import { Panel } from '../../components/Panel'
 import { TextAreaField } from '../../components/TextAreaField'
 import { computeHash, generateUuid, HASH_ALGORITHMS, type HashAlgorithm } from '../../lib/hash/hash'
 
+const EMPTY_HASHES: Record<HashAlgorithm, string> = {
+  MD5: '',
+  'SHA-1': '',
+  'SHA-256': '',
+  'SHA-384': '',
+  'SHA-512': '',
+}
+
 export function UuidHashTool() {
   const [uuid, setUuid] = useState(generateUuid())
   const [input, setInput] = useState('')
-  const [hashes, setHashes] = useState<Record<HashAlgorithm, string>>({
-    MD5: '',
-    'SHA-1': '',
-    'SHA-256': '',
-    'SHA-384': '',
-    'SHA-512': '',
-  })
+  const [hashes, setHashes] = useState<Record<HashAlgorithm, string>>(EMPTY_HASHES)
 
   useEffect(() => {
+    if (!input) return
     let cancelled = false
-    if (!input) {
-      setHashes({ MD5: '', 'SHA-1': '', 'SHA-256': '', 'SHA-384': '', 'SHA-512': '' })
-      return
-    }
     Promise.all(HASH_ALGORITHMS.map((algo) => computeHash(input, algo))).then((results) => {
       if (cancelled) return
       const next = {} as Record<HashAlgorithm, string>
@@ -33,6 +32,8 @@ export function UuidHashTool() {
       cancelled = true
     }
   }, [input])
+
+  const displayedHashes = input ? hashes : EMPTY_HASHES
 
   return (
     <div className="flex flex-1 flex-col gap-4">
@@ -64,9 +65,9 @@ export function UuidHashTool() {
 
       <div className="grid gap-3">
         {HASH_ALGORITHMS.map((algo) => (
-          <Panel key={algo} title={algo} actions={<CopyButton value={hashes[algo]} />}>
+          <Panel key={algo} title={algo} actions={<CopyButton value={displayedHashes[algo]} />}>
             <code className="block break-all font-mono text-sm text-slate-700 dark:text-slate-200">
-              {hashes[algo] || '—'}
+              {displayedHashes[algo] || '—'}
             </code>
           </Panel>
         ))}

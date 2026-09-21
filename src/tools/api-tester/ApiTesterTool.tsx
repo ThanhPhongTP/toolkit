@@ -3,7 +3,9 @@ import { Panel } from '../../components/Panel'
 import { useLocalStorage } from '../../hooks/useLocalStorage'
 import { generateCurlCommand } from '../../lib/curl/curlGenerate'
 import {
+  applyCorsProxy,
   createEmptyRequest,
+  DEFAULT_CORS_PROXY_TEMPLATE,
   sendHttpRequest,
   type HttpRequestModel,
   type HttpResponseSummary,
@@ -26,6 +28,7 @@ export function ApiTesterTool() {
   const [error, setError] = useState<string | undefined>()
   const [sending, setSending] = useState(false)
   const [history, setHistory] = useLocalStorage<ApiHistoryEntry[]>('toolkit:api-history', [])
+  const [useCorsProxy, setUseCorsProxy] = useLocalStorage('toolkit:api-use-cors-proxy', false)
 
   const handleSend = async () => {
     setSending(true)
@@ -33,7 +36,8 @@ export function ApiTesterTool() {
     setResponse(undefined)
     const entry: ApiHistoryEntry = { ...request, id: crypto.randomUUID(), timestamp: Date.now() }
     try {
-      const result = await sendHttpRequest(request)
+      const fetchUrl = useCorsProxy ? applyCorsProxy(request.url, DEFAULT_CORS_PROXY_TEMPLATE) : request.url
+      const result = await sendHttpRequest(request, fetchUrl)
       setResponse(result)
       setHistory((prev) => [{ ...entry, status: result.status }, ...prev].slice(0, MAX_HISTORY))
     } catch (err) {
@@ -47,7 +51,14 @@ export function ApiTesterTool() {
   return (
     <div className="grid flex-1 grid-cols-1 gap-4 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
       <div className="flex flex-col gap-4">
-        <RequestPanel request={request} onChange={setRequest} onSend={handleSend} sending={sending} />
+        <RequestPanel
+          request={request}
+          onChange={setRequest}
+          onSend={handleSend}
+          sending={sending}
+          useCorsProxy={useCorsProxy}
+          onToggleCorsProxy={setUseCorsProxy}
+        />
         <Panel title="Response">
           <ResponsePanel response={response} error={error} curlCommand={generateCurlCommand(request)} />
         </Panel>

@@ -45,7 +45,8 @@ export function parseUnixTimestamp(value: string): Date {
     throw new Error('Enter a Unix timestamp in seconds or milliseconds')
   }
   const num = Number(trimmed)
-  const ms = trimmed.length > 10 ? num : num * 1000
+  const digitCount = trimmed.replace(/^-/, '').length
+  const ms = digitCount > 10 ? num : num * 1000
   return new Date(ms)
 }
 

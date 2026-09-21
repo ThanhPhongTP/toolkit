@@ -13,6 +13,14 @@ describe('parseUnixTimestamp', () => {
   it('rejects non-numeric input', () => {
     expect(() => parseUnixTimestamp('not-a-number')).toThrow()
   })
+
+  it('treats a 10-digit negative value as seconds, ignoring the sign when counting digits', () => {
+    expect(parseUnixTimestamp('-1000000000').getTime()).toBe(-1000000000000)
+  })
+
+  it('treats a 13-digit negative value as milliseconds', () => {
+    expect(parseUnixTimestamp('-1000000000000').getTime()).toBe(-1000000000000)
+  })
 })
 
 describe('parseDateInput', () => {

@@ -3,6 +3,11 @@ import { ErrorBanner } from '../../components/ErrorBanner'
 import { Panel } from '../../components/Panel'
 import { TextAreaField } from '../../components/TextAreaField'
 
+interface Segment {
+  value: string
+  matched: boolean
+}
+
 export function RegexTesterTool() {
   const [pattern, setPattern] = useState('\\b[\\w.-]+@[\\w.-]+\\.\\w+\\b')
   const [flags, setFlags] = useState('g')
@@ -19,18 +24,22 @@ export function RegexTesterTool() {
     }
   }, [pattern, flags, text])
 
-  const highlighted = useMemo(() => {
-    if (!result.ok || result.matches.length === 0) return text
-    const parts: string[] = []
+  const segments = useMemo<Segment[]>(() => {
+    if (!result.ok || result.matches.length === 0) return [{ value: text, matched: false }]
+    const parts: Segment[] = []
     let lastIndex = 0
     for (const match of result.matches) {
       if (match.index === undefined || match[0].length === 0) continue
-      parts.push(text.slice(lastIndex, match.index))
-      parts.push(`${match[0]}`)
+      if (match.index > lastIndex) {
+        parts.push({ value: text.slice(lastIndex, match.index), matched: false })
+      }
+      parts.push({ value: match[0], matched: true })
       lastIndex = match.index + match[0].length
     }
-    parts.push(text.slice(lastIndex))
-    return parts.join('')
+    if (lastIndex < text.length) {
+      parts.push({ value: text.slice(lastIndex), matched: false })
+    }
+    return parts
   }, [result, text])
 
   return (
@@ -67,13 +76,13 @@ export function RegexTesterTool() {
       />
       <Panel title="Highlighted matches" className="flex-1">
         <pre className="h-full overflow-auto whitespace-pre-wrap break-all font-mono text-sm text-slate-800 dark:text-slate-100">
-          {highlighted.split(/|/).map((chunk, i) =>
-            i % 2 === 1 ? (
+          {segments.map((segment, i) =>
+            segment.matched ? (
               <mark key={i} className="rounded bg-amber-200 px-0.5 dark:bg-amber-500/40">
-                {chunk}
+                {segment.value}
               </mark>
             ) : (
-              <span key={i}>{chunk}</span>
+              <span key={i}>{segment.value}</span>
             ),
           )}
         </pre>

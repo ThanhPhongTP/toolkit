@@ -24,8 +24,8 @@ export function ResponsePanel({ response, error, curlCommand }: ResponsePanelPro
         <p className="text-xs text-slate-500 dark:text-slate-400">
           This often means the target API blocked the browser via CORS (its response is missing
           <code className="mx-1 rounded bg-slate-100 px-1 dark:bg-slate-800">Access-Control-Allow-Origin</code>
-          for this origin), or the URL/network is unreachable. Try the equivalent request outside the
-          browser instead:
+          for this origin), or the URL/network is unreachable. Try enabling "Route through a public CORS
+          proxy" above and resending, or run the equivalent request outside the browser instead:
         </p>
         <Panel title="Copy as curl" actions={<CopyButton value={curlCommand} />}>
           <pre className="overflow-auto whitespace-pre-wrap break-all font-mono text-xs">{curlCommand}</pre>

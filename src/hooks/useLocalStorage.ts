@@ -1,13 +1,14 @@
 import { useCallback, useEffect, useState } from 'react'
 
-export function useLocalStorage<T>(key: string, initialValue: T) {
+export function useLocalStorage<T>(key: string, initialValue: T | (() => T)) {
   const [value, setValue] = useState<T>(() => {
     try {
       const stored = window.localStorage.getItem(key)
-      return stored !== null ? (JSON.parse(stored) as T) : initialValue
+      if (stored !== null) return JSON.parse(stored) as T
     } catch {
-      return initialValue
+      // fall through to initialValue
     }
+    return initialValue instanceof Function ? initialValue() : initialValue
   })
 
   useEffect(() => {

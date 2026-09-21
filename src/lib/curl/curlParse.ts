@@ -19,8 +19,16 @@ function tokenize(command: string): string[] {
     } else if (char === '"' || char === "'") {
       quote = char
     } else if (char === '\\' && i + 1 < command.length) {
-      current += command[i + 1]
-      i++
+      const nextChar = command[i + 1]
+      if (nextChar === '\n') {
+        // Line continuation ("\" at end of line): swallow it, don't split or insert a token.
+        i++
+      } else if (nextChar === '\r' && command[i + 2] === '\n') {
+        i += 2
+      } else {
+        current += nextChar
+        i++
+      }
     } else if (/\s/.test(char)) {
       if (current) {
         tokens.push(current)
@@ -36,11 +44,11 @@ function tokenize(command: string): string[] {
 }
 
 export function parseCurlCommand(command: string): HttpRequestModel {
-  const trimmed = command.trim().replace(/^curl\s+/, '')
   if (!command.trim().startsWith('curl')) {
     throw new Error('Command must start with "curl"')
   }
-  const tokens = tokenize(trimmed)
+  const tokens = tokenize(command.trim())
+  if (tokens[0] === 'curl') tokens.shift()
 
   const headers: { key: string; value: string }[] = []
   let method: HttpMethod | undefined

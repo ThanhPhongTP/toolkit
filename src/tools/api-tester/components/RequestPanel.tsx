@@ -9,9 +9,18 @@ interface RequestPanelProps {
   onChange: (request: HttpRequestModel) => void
   onSend: () => void
   sending: boolean
+  useCorsProxy: boolean
+  onToggleCorsProxy: (value: boolean) => void
 }
 
-export function RequestPanel({ request, onChange, onSend, sending }: RequestPanelProps) {
+export function RequestPanel({
+  request,
+  onChange,
+  onSend,
+  sending,
+  useCorsProxy,
+  onToggleCorsProxy,
+}: RequestPanelProps) {
   const updateHeader = (index: number, field: keyof HttpHeader, value: string) => {
     onChange({
       ...request,
@@ -48,6 +57,17 @@ export function RequestPanel({ request, onChange, onSend, sending }: RequestPane
           {sending ? 'Sending...' : 'Send'}
         </button>
       </div>
+
+      <label className="flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400">
+        <input
+          type="checkbox"
+          checked={useCorsProxy}
+          onChange={(e) => onToggleCorsProxy(e.target.checked)}
+          className="h-3.5 w-3.5 rounded border-slate-300 dark:border-slate-700"
+        />
+        Route through a public CORS proxy (corsproxy.io) — use only for testing public, non-sensitive
+        endpoints, since the request goes through a third party.
+      </label>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">

@@ -35,7 +35,10 @@ export function generateLoremIpsum(
 
   if (unit === 'words') {
     const words = Array.from({ length: count }, () => WORDS[randomInt(0, WORDS.length - 1)])
-    if (startWithLorem) words.splice(0, Math.min(2, count), 'lorem', 'ipsum')
+    if (startWithLorem) {
+      const prefix = ['lorem', 'ipsum'].slice(0, count)
+      words.splice(0, prefix.length, ...prefix)
+    }
     return capitalize(words.join(' ')) + '.'
   }
 

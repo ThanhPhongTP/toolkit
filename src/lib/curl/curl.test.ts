@@ -53,6 +53,24 @@ describe('parseCurlCommand', () => {
     expect(() => parseCurlCommand('curl -X GET')).toThrow()
   })
 
+  it('parses a multi-line command with a continuation right after "curl"', () => {
+    const result = parseCurlCommand(
+      `curl \\\n  -X GET \\\n  -H "Authorization: Bearer TOKEN" \\\n  https://api.example.com/resource`,
+    )
+    expect(result.method).toBe('GET')
+    expect(result.url).toBe('https://api.example.com/resource')
+    expect(result.headers).toEqual([{ key: 'Authorization', value: 'Bearer TOKEN' }])
+  })
+
+  it('parses a "copy as cURL" style multi-line command', () => {
+    const result = parseCurlCommand(
+      `curl 'https://api.example.com/users' \\\n  -H 'accept: application/json' \\\n  --data-raw '{"key":"value"}' \\\n  --compressed`,
+    )
+    expect(result.url).toBe('https://api.example.com/users')
+    expect(result.headers).toEqual([{ key: 'accept', value: 'application/json' }])
+    expect(result.body).toBe('{"key":"value"}')
+  })
+
   it('round-trips with generateCurlCommand', () => {
     const original = {
       method: 'POST' as const,

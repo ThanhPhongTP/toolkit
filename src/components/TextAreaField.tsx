@@ -1,4 +1,4 @@
-import type { TextareaHTMLAttributes } from 'react'
+import { forwardRef, type TextareaHTMLAttributes } from 'react'
 import clsx from 'clsx'
 
 interface TextAreaFieldProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -6,7 +6,10 @@ interface TextAreaFieldProps extends TextareaHTMLAttributes<HTMLTextAreaElement>
   showCharCount?: boolean
 }
 
-export function TextAreaField({ label, showCharCount, className, value, ...props }: TextAreaFieldProps) {
+export const TextAreaField = forwardRef<HTMLTextAreaElement, TextAreaFieldProps>(function TextAreaField(
+  { label, showCharCount, className, value, ...props },
+  ref,
+) {
   const length = typeof value === 'string' ? value.length : 0
   return (
     <div className="flex flex-1 flex-col gap-1.5">
@@ -17,6 +20,7 @@ export function TextAreaField({ label, showCharCount, className, value, ...props
         </div>
       )}
       <textarea
+        ref={ref}
         value={value}
         spellCheck={false}
         className={clsx(
@@ -27,4 +31,4 @@ export function TextAreaField({ label, showCharCount, className, value, ...props
       />
     </div>
   )
-}
+})
