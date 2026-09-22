@@ -119,3 +119,29 @@ export function formatRgb(rgb: RgbColor): string {
 export function formatHsl(hsl: HslColor): string {
   return `hsl(${hsl.h}, ${hsl.s}%, ${hsl.l}%)`
 }
+
+function toUnitInterval(channel: number): number {
+  return Math.round((clamp(channel, 0, 255) / 255) * 1000) / 1000
+}
+
+export function formatUIColor(rgb: RgbColor): string {
+  const r = toUnitInterval(rgb.r)
+  const g = toUnitInterval(rgb.g)
+  const b = toUnitInterval(rgb.b)
+  return `UIColor(red: ${r}, green: ${g}, blue: ${b}, alpha: 1.0)`
+}
+
+export function formatSwiftUIColor(rgb: RgbColor): string {
+  const r = toUnitInterval(rgb.r)
+  const g = toUnitInterval(rgb.g)
+  const b = toUnitInterval(rgb.b)
+  return `Color(red: ${r}, green: ${g}, blue: ${b})`
+}
+
+export function formatAndroidComposeColor(rgb: RgbColor): string {
+  return `Color(0xFF${rgbToHex(rgb).slice(1)})`
+}
+
+export function formatAndroidXmlColor(rgb: RgbColor): string {
+  return `<color name="my_color">${rgbToHex(rgb)}</color>`
+}

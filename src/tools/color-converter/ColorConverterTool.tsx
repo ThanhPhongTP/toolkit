@@ -2,7 +2,18 @@ import { useMemo, useState } from 'react'
 import { CopyButton } from '../../components/CopyButton'
 import { ErrorBanner } from '../../components/ErrorBanner'
 import { Panel } from '../../components/Panel'
-import { formatHsl, formatRgb, parseHex, rgbToHex, rgbToHsl, rgbToHsv } from '../../lib/color/colorConvert'
+import {
+  formatAndroidComposeColor,
+  formatAndroidXmlColor,
+  formatHsl,
+  formatRgb,
+  formatSwiftUIColor,
+  formatUIColor,
+  parseHex,
+  rgbToHex,
+  rgbToHsl,
+  rgbToHsv,
+} from '../../lib/color/colorConvert'
 
 export function ColorConverterTool() {
   const [hex, setHex] = useState('#3B82F6')
@@ -16,6 +27,10 @@ export function ColorConverterTool() {
         hex: rgbToHex(rgb),
         hsl: rgbToHsl(rgb),
         hsv: rgbToHsv(rgb),
+        uiColor: formatUIColor(rgb),
+        swiftUIColor: formatSwiftUIColor(rgb),
+        androidCompose: formatAndroidComposeColor(rgb),
+        androidXml: formatAndroidXmlColor(rgb),
       }
     } catch (err) {
       return { ok: false as const, error: (err as Error).message }
@@ -42,7 +57,7 @@ export function ColorConverterTool() {
       {!result.ok && <ErrorBanner message={result.error} />}
 
       {result.ok && (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           <Panel title="HEX" actions={<CopyButton value={result.hex} />}>
             <code className="font-mono text-sm">{result.hex}</code>
           </Panel>
@@ -61,6 +76,18 @@ export function ColorConverterTool() {
             <code className="font-mono text-sm">
               hsv({result.hsv.h}, {result.hsv.s}%, {result.hsv.v}%)
             </code>
+          </Panel>
+          <Panel title="iOS UIKit (Swift)" actions={<CopyButton value={result.uiColor} />}>
+            <code className="font-mono text-sm break-all">{result.uiColor}</code>
+          </Panel>
+          <Panel title="SwiftUI" actions={<CopyButton value={result.swiftUIColor} />}>
+            <code className="font-mono text-sm break-all">{result.swiftUIColor}</code>
+          </Panel>
+          <Panel title="Android (Compose)" actions={<CopyButton value={result.androidCompose} />}>
+            <code className="font-mono text-sm break-all">{result.androidCompose}</code>
+          </Panel>
+          <Panel title="Android (XML)" actions={<CopyButton value={result.androidXml} />}>
+            <code className="font-mono text-sm break-all">{result.androidXml}</code>
           </Panel>
         </div>
       )}
