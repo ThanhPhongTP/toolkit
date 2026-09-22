@@ -31,6 +31,28 @@ describe('NotesTool todo list', () => {
     expect(screen.getAllByText('Fast repeat')).toHaveLength(1)
   })
 
+  it('ignores Enter while an IME composition is still open, and adds once the following real Enter fires', () => {
+    render(<NotesTool />)
+    const input = getInput()
+    fireEvent.change(input, { target: { value: 'từ chưa gõ xong' } })
+    // The key that confirms an IME composition (e.g. a Vietnamese word not yet finalized
+    // with a space) also dispatches a keydown with key 'Enter' while isComposing is true.
+    fireEvent.keyDown(input, { key: 'Enter', isComposing: true })
+    expect(screen.queryByText('từ chưa gõ xong')).toBeNull()
+
+    // The real, post-composition Enter that follows should still add it exactly once.
+    fireEvent.keyDown(input, { key: 'Enter' })
+    expect(screen.getAllByText('từ chưa gõ xong')).toHaveLength(1)
+  })
+
+  it('ignores Enter reported via the legacy keyCode 229 composition signal', () => {
+    render(<NotesTool />)
+    const input = getInput()
+    fireEvent.change(input, { target: { value: 'legacy ime' } })
+    fireEvent.keyDown(input, { key: 'Enter', keyCode: 229 })
+    expect(screen.queryByText('legacy ime')).toBeNull()
+  })
+
   it('clears the input after adding', () => {
     render(<NotesTool />)
     const input = getInput() as HTMLInputElement

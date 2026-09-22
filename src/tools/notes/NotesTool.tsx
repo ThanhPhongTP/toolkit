@@ -67,13 +67,24 @@ function TodoTab() {
     setItems((prev) => [...prev, createTodo(text)])
   }
 
+  const handleDraftKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    // While an IME composition is still open (e.g. typing a Vietnamese word that hasn't
+    // been finalized with a space yet), the key that confirms the composition also fires
+    // as a keydown with key 'Enter'. Acting on that keydown adds the not-yet-finalized
+    // text, then the real Enter that follows adds it again. Ignore Enter while composing
+    // (isComposing, or keyCode 229 for browsers that don't set isComposing) so only the
+    // real, post-composition Enter triggers the add.
+    if (e.key !== 'Enter' || e.nativeEvent.isComposing || e.keyCode === 229) return
+    handleAdd()
+  }
+
   return (
     <div className="flex flex-1 flex-col gap-3">
       <div className="flex gap-2">
         <input
           value={draft}
           onChange={(e) => handleDraftChange(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+          onKeyDown={handleDraftKeyDown}
           placeholder="Việc cần làm hoặc thứ cần thay đổi..."
           className="flex-1 rounded-md border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 dark:border-slate-700 dark:bg-slate-900"
         />
