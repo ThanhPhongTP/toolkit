@@ -21,7 +21,7 @@ Dev Toolkit là tập hợp hơn 20 công cụ tiện ích thiết yếu phục 
 
 ---
 
-## 🧰 Danh sách 20 công cụ có sẵn
+## 🧰 Danh sách 21 công cụ có sẵn
 
 ### 📋 Nhóm 1: Không gian làm việc (Workspace)
 | Công cụ | Mô tả tính năng |
@@ -39,6 +39,7 @@ Dev Toolkit là tập hợp hơn 20 công cụ tiện ích thiết yếu phục 
 | **UUID & Hash Generator** | Tạo mã UUID v4 và tính toán các mã băm phổ biến (MD5, SHA-1, SHA-256, SHA-512). |
 | **Diff Checker** | So sánh sự khác biệt giữa hai đoạn mã/văn bản (Text Diff) trực quan theo từng dòng hoặc từng ký tự. |
 | **Timestamp Converter** | Chuyển đổi qua lại giữa Unix Timestamp (giây / mili-giây) và thời gian thực (ISO, UTC, Local time). |
+| **Mobile Terminal Commands** | Tra cứu lệnh terminal để chạy, build, debug app **React Native**, **Flutter**, **Android** (adb, gradle, emulator) và **iOS** (simctl, xcodebuild, CocoaPods, fastlane). Nhập tham số (package name, device, flavor...) một lần, lệnh tự điền và copy nhanh. |
 
 ### 🔄 Nhóm 3: Chuyển đổi Dữ liệu & Văn bản (Converters)
 | Công cụ | Mô tả tính năng |
@@ -68,7 +69,7 @@ Dev Toolkit là tập hợp hơn 20 công cụ tiện ích thiết yếu phục 
 * **Styling:** [Tailwind CSS v4](https://tailwindcss.com/)
 * **Routing:** [React Router 7](https://reactrouter.com/) (Data Browser Router)
 * **Icons:** [Lucide React](https://lucide.dev/)
-* **Testing:** [Vitest](https://vitest.dev/) (Bộ test bao phủ 20 test suites, 137 unit tests)
+* **Testing:** [Vitest](https://vitest.dev/) (Bộ test bao phủ 21 test suites, 149 unit tests)
 * **Linter:** [Oxlint](https://oxc.rs/) siêu tốc
 
 ---
