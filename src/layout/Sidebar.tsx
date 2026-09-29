@@ -12,8 +12,25 @@ export function Sidebar() {
 
   return (
     <aside className="flex h-full w-64 shrink-0 flex-col gap-3 border-r border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
-      <NavLink to="/" className="px-1 text-base font-bold text-slate-900 dark:text-slate-100">
-        Dev Toolkit
+      <NavLink
+        to="/"
+        className="group flex items-center gap-3 rounded-xl p-1.5 transition-all hover:bg-slate-100 dark:hover:bg-slate-800/60"
+      >
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#090909] shadow-sm ring-1 ring-slate-800/80 transition-transform group-hover:scale-105">
+          <img
+            src="/logo1-crop.png"
+            alt="Phong Logo"
+            className="h-full w-full object-cover"
+          />
+        </div>
+        <div className="flex min-w-0 flex-col">
+          <span className="text-base font-bold tracking-tight text-slate-900 dark:text-slate-100">
+            Dev Toolkit
+          </span>
+          <span className="truncate text-[10.5px] font-medium text-slate-500 dark:text-slate-400">
+            Build, solve, learn, evolve.
+          </span>
+        </div>
       </NavLink>
       <SidebarSearch value={query} onChange={setQuery} />
       <nav className="flex-1 space-y-4 overflow-y-auto">
@@ -52,6 +69,12 @@ export function Sidebar() {
           <p className="px-2 text-sm text-slate-400">No tools match "{query}"</p>
         )}
       </nav>
+      <div className="mt-auto border-t border-slate-200/80 pt-2.5 px-1 dark:border-slate-800/80">
+        <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500">
+          Built with <span className="inline-block transition-transform duration-200 hover:scale-125 select-none">❤️</span> by{' '}
+          <span className="font-semibold text-slate-600 dark:text-slate-300">Phong</span>
+        </p>
+      </div>
     </aside>
   )
 }
