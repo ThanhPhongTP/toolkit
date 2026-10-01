@@ -11,12 +11,12 @@ export function Sidebar() {
   const filtered = useMemo(() => searchTools(query), [query])
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col gap-3 border-r border-slate-200 bg-white p-3 dark:border-slate-800 dark:bg-slate-900">
+    <aside className="flex h-full w-64 shrink-0 flex-col gap-3 border-r border-slate-200/80 bg-white/75 p-3 backdrop-blur-xl transition-all duration-300 dark:border-indigo-500/15 dark:bg-[#0a0d1e]/65">
       <NavLink
         to="/"
         className="group flex items-center gap-3 rounded-xl p-1.5 transition-all hover:bg-slate-100 dark:hover:bg-slate-800/60"
       >
-        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#090909] shadow-sm ring-1 ring-slate-800/80 transition-transform group-hover:scale-105">
+        <div className="relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-[#090909] shadow-sm ring-1 ring-slate-800/80 transition-all group-hover:scale-105 group-hover:ring-indigo-500/40 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.4)]">
           <img
             src="/logo1-crop.png"
             alt="Phong Logo"
@@ -49,10 +49,10 @@ export function Sidebar() {
                       to={`/tools/${tool.id}`}
                       className={({ isActive }) =>
                         clsx(
-                          'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition',
+                          'flex items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-all',
                           isActive
-                            ? 'bg-indigo-50 font-medium text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-300'
-                            : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800',
+                            ? 'bg-gradient-to-r from-indigo-500/15 to-purple-500/10 font-semibold text-indigo-600 shadow-[0_0_12px_rgba(99,102,241,0.15)] ring-1 ring-indigo-500/30 dark:from-indigo-500/20 dark:to-purple-500/15 dark:text-indigo-300 dark:ring-indigo-500/40 dark:shadow-[0_0_15px_rgba(99,102,241,0.25)]'
+                            : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/70',
                         )
                       }
                     >
@@ -69,9 +69,9 @@ export function Sidebar() {
           <p className="px-2 text-sm text-slate-400">No tools match "{query}"</p>
         )}
       </nav>
-      <div className="mt-auto border-t border-slate-200/80 pt-2.5 px-1 dark:border-slate-800/80">
+      <div className="mt-auto border-t border-slate-200/80 px-1 pt-2.5 dark:border-slate-800/80">
         <p className="text-[11px] font-medium text-slate-400 dark:text-slate-500">
-          Built with <span className="inline-block transition-transform duration-200 hover:scale-125 select-none">❤️</span> by{' '}
+          Built with <span className="inline-block select-none transition-transform duration-200 hover:scale-125">❤️</span> by{' '}
           <span className="font-semibold text-slate-600 dark:text-slate-300">Phong</span>
         </p>
       </div>
