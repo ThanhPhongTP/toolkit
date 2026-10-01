@@ -33,7 +33,7 @@ export function Sidebar() {
         </div>
       </NavLink>
       <SidebarSearch value={query} onChange={setQuery} />
-      <nav className="flex-1 space-y-4 overflow-y-auto">
+      <nav className="no-scrollbar flex-1 space-y-4 overflow-y-auto">
         {CATEGORIES.map((category) => {
           const tools = filtered.filter((tool) => tool.category === category)
           if (tools.length === 0) return null
