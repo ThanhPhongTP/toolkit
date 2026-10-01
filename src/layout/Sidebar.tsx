@@ -6,7 +6,11 @@ import { SidebarSearch } from './SidebarSearch'
 
 const CATEGORIES: ToolCategory[] = ['workspace', 'dev-utils', 'converters', 'network']
 
-export function Sidebar() {
+interface SidebarProps {
+  onOpenCommandPalette?: () => void
+}
+
+export function Sidebar({ onOpenCommandPalette }: SidebarProps) {
   const [query, setQuery] = useState('')
   const filtered = useMemo(() => searchTools(query), [query])
 
@@ -32,7 +36,7 @@ export function Sidebar() {
           </span>
         </div>
       </NavLink>
-      <SidebarSearch value={query} onChange={setQuery} />
+      <SidebarSearch value={query} onChange={setQuery} onOpenPalette={onOpenCommandPalette} />
       <nav className="no-scrollbar flex-1 space-y-4 overflow-y-auto">
         {CATEGORIES.map((category) => {
           const tools = filtered.filter((tool) => tool.category === category)
